@@ -1,6 +1,7 @@
 package com.coolweather.android.util;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.coolweather.android.db.City;
 import com.coolweather.android.db.Country;
@@ -19,15 +20,20 @@ public class Utility {
         if(!TextUtils.isEmpty(response)){
             try {
                 JSONArray allProvince = new JSONArray(response);
+                Log.i("Mark","111111");
                 for(int i=0;i<allProvince.length();i++){
+
                     JSONObject provinceObject = allProvince.getJSONObject(i);
+
                     Province province = new Province();
-                    province.setProvinceName(provinceObject.getString("provinceName"));
-                    province.setProvinceCode(provinceObject.getInt("provinceCode"));
+                    province.setProvinceName(provinceObject.getString("name"));
+                    province.setProvinceCode(provinceObject.getInt("id"));
                     province.save();
                 }
+                Log.i("Mark","3333");
                 return true;
             } catch (JSONException e) {
+                Log.i("e=",e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -41,8 +47,8 @@ public class Utility {
                 for(int i=0;i<allCity.length();i++){
                     JSONObject cityObject = allCity.getJSONObject(i);
                     City city = new City();
-                    city.setCityName(cityObject.getString("cityName"));
-                    city.setCityCode(cityObject.getInt("cityCode"));
+                    city.setCityName(cityObject.getString("name"));
+                    city.setCityCode(cityObject.getInt("id"));
                     city.setProvinceId(provinceId);
                     city.save();
                 }
@@ -58,11 +64,13 @@ public class Utility {
         if(!TextUtils.isEmpty(response)){
             try {
                 JSONArray allCountry = new JSONArray(response);
+                Log.i("CountyResponse=",""+response);
                 for(int i=0;i<allCountry.length();i++){
                     JSONObject countryObject = allCountry.getJSONObject(i);
                     Country country = new Country();
-                    country.setCountryName(countryObject.getString("countryName"));
-                    country.setCountryCode(countryObject.getInt("countryCode"));
+                    country.setCountryName(countryObject.getString("name"));
+                    country.setCountryCode(countryObject.getInt("id"));
+                    country.setWeatherId(countryObject.getString("weather_id"));
                     country.setCityId(cityId);
                     country.save();
                 }
